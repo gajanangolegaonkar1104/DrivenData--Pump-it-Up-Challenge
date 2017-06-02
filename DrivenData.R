@@ -7,11 +7,11 @@ library(h2o)
 library(dplyr)
 
 #read data from respective dataset files
-data_training.lb<-read.csv("C:/Users/nileshpharate/Documents/GitHub/ML-Project/data/train_lables.csv",
+data_training.lb<-read.csv("C:/Users/gajanan/Documents/GitHub/ML-Project/data/train_lables.csv",
                            na.strings = c("na","","NA","unknown","Unknown"));
-data_training.val<-read.csv("C:/Users/nileshpharate/Documents/GitHub/ML-Project/data/train_value.csv",
+data_training.val<-read.csv("C:/Users/gajanan/Documents/GitHub/ML-Project/data/train_value.csv",
                             na.strings = c("na","","NA","unknown","Unknown"))
-data_testing.val<-read.csv("C:/Users/nileshpharate/Documents/GitHub/ML-Project/data/test_values.csv",
+data_testing.val<-read.csv("C:/Users/gajanan/Documents/GitHub/ML-Project/data/test_values.csv",
                            na.strings = c("na","","NA","unknown","Unknown"))
 
 data_training.val<-data_training.val[sample(nrow(data_training.val)),]
