@@ -1,4 +1,5 @@
-#FINAL SOURCE CODE - RANDOM FORESTS
+#FINAL SOURCE CODE
+#AUTHOR : Gajanan Golegaonkar
 
 #h2o library h2o.randomForest funtion
 library(h2o) 
@@ -22,8 +23,10 @@ data_train_indexes <- sample(1:nrow(data_training.val), 0.1 * nrow(data_training
 #join train values and train lables using common column ID
 data_training = inner_join(data_training.lb, data_training.val, by = "id")
 
-#remove NA values from data frame
-data_training <- na.omit(data_training)
+#scaling the numeric columns
+data$amount_tsh = scale(data$amount_tsh)
+data$latitude = scale(data$latitude)
+data$longtitude = scale(data$longitude)
 
 #marking 0 and invalid values as NA
 for(i in 1:nrow(data_training)) {
@@ -56,19 +59,6 @@ for(i in 1:nrow(data_training)) {
     
   }
   
-  if(!is.na(data_training$scheme_management[[i]][1]))
-  {
-    if(data_training$scheme_management[[i]][1] == 0)
-      data_training$scheme_management[[i]][1] = NA
-    
-  }
-  
-  if(!is.na(data_training$amount_tsh[[i]][1]))
-  {
-    if(data_training$amount_tsh[[i]][1] == 0)
-      data_training$amount_tsh[[i]][1] = NA
-    
-  }
   
   if(!is.na(data_training$scheme_name[[i]][1]))
   {
@@ -152,18 +142,15 @@ h2o.confusionMatrix(random_forest_model)
 
 predictions = as.data.frame(h2o.predict(random_forest_model,test_h2o))[,1]
 
-test_h2o1 = as.h2o(data_testing.val,destination_frame = "test_h2o1.hex")
-
-predictions1 = as.data.frame(h2o.predict(random_forest_model,test_h2o1))[,1]
 
 library(dplyr)
 library(data.table) 
 
-final_submission = tbl_df(fread("C:/Users/nileshpharate/Documents/GitHub/ML-Project/data/SubmissionFormat.csv")) %>%
-  mutate(status_group = predictions1)
+final_submission = tbl_df(fread("C:/Users/gajanan/Documents/GitHub/ML-Project/data/SubmissionFormat.csv")) %>%
+  mutate(status_group = predictions)
 
 write.csv(final_submission,row.names = FALSE,quote = FALSE,
-          file = "C:/Users/nileshpharate/Documents/GitHub/ML-Project/data/submission_final.csv")
+          file = "C:/Users/gajanan/Documents/GitHub/ML-Project/data/submission_final.csv")
 
 
 #ROC metric
